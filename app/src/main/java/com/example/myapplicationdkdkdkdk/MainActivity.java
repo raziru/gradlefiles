@@ -138,5 +138,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void gameCheckAction(View view) {
         startActivity(new Intent(this, GameCheckActivity.class));
     }
+
+    public void letsLSTM(View view) {
+
+    }
+
 }
 

@@ -52,11 +52,22 @@ tools:context=".MainActivity">
         app:row_count="12" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/go_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="70dp"
+        android:src="@android:drawable/ic_input_add"
+        android:onClick="letsLSTM"
+        android:text="gogo" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_margin="10dp"
+
+        android:layout_marginBottom="10dp"
         android:contentDescription="@string/submit"
         android:onClick="gameCheckAction"
         android:src="@android:drawable/btn_star_big_on" />
