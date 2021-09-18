@@ -4,11 +4,21 @@ package com.example.myapplicationdkdkdkdk;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import org.tensorflow.lite.Interpreter;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+
+
 
 
 import androidx.annotation.Nullable;
@@ -23,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Context context;
     public static final int REQUEST_ADD = 1;
     public static final int REQUEST_EDIT = 2;
+    Interpreter tflite;
 
     private Button addBtn;
     private Button clearBtn;
@@ -34,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            tflite=new Interpreter(loadModelFile());
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
         init();
     }
 
@@ -141,7 +157,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void letsLSTM(View view) {
 
+
     }
+    /** Memory-map the model file in Assets. */
+    private MappedByteBuffer loadModelFile() throws IOException {
+        AssetFileDescriptor fileDescriptor = this.getAssets().openFd("mymodelRNN.tflite");
+        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
+        FileChannel fileChannel = inputStream.getChannel();
+        long startOffset = fileDescriptor.getStartOffset();
+        long declaredLength = fileDescriptor.getDeclaredLength();
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+    }
+
+
 
 }
 
