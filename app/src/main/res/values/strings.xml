@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">My Applicationdkdkdkdk</string>
+    <string name="drag_me">Drag me</string>
+    <string name="action_today">action_today</string>
+    <string name="action_day_view">action_day_view</string>
+    <string name="action_three_day_view">action_three_day_view</string>
+    <string name="action_week_view">action_week_view</string>
+    <string name="submit">submit</string>
+</resources>
