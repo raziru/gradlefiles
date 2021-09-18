@@ -8,6 +8,7 @@ import android.content.res.AssetFileDescriptor;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import com.github.tlaabs.timetableview.Schedule;
 import com.github.tlaabs.timetableview.TimetableView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Context context;
@@ -39,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button clearBtn;
     private Button saveBtn;
     private Button loadBtn;
+    private int editIdx;
+    private Schedule schedule;
+
+    public static List<String> taskList;
 
     private TimetableView timetable;
     @Override
@@ -59,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         clearBtn = findViewById(R.id.clear_btn);
         saveBtn = findViewById(R.id.save_btn);
         loadBtn = findViewById(R.id.load_btn);
+        taskList=new ArrayList<String>();
 
         timetable = findViewById(R.id.timetable);
         timetable.setHeaderHighlight(1);
@@ -156,8 +163,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void letsLSTM(View view) {
+        String title;
+        String place;
+        String memo;
+
+        String title_temp;
+        String place_temp;
+        String memo_temp;
+        float max =0;
+        float[] inputVal=new float[1];
+        float [][] outputVal=new float[1][1];
+
+        Intent i = getIntent();
+        editIdx = i.getIntExtra("idx",-1);
+        ArrayList<Schedule> schedules = (ArrayList<Schedule>)i.getSerializableExtra("schedules");
+        schedule = schedules.get(0);
+        title_temp=schedule.getClassTitle();
+        place_temp=schedule.getClassPlace();
+        memo_temp=schedule.getProfessorName();
+        schedule.getEndTime();
+        schedule.getStartTime();
+        schedule.getDay();
 
 
+        inputVal[0]=Float.valueOf(title_temp);
+        float inferredValue=outputVal[0][0];
+        if (inferredValue>=max)
+        {
+            max=inferredValue;
+            title=title_temp;
+            place=place_temp;
+            memo=memo_temp;
+
+        }
+
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
     /** Memory-map the model file in Assets. */
     private MappedByteBuffer loadModelFile() throws IOException {

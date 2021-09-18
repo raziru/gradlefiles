@@ -23,7 +23,7 @@ public class GameCheckActivity extends Activity implements OnClickListener{
     public ArrayList<Parent> deptList = new ArrayList<Parent>();
 
     private GameCheckAdapter listAdapter;
-    private ExpandableListView myList;
+    public ExpandableListView myList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,9 @@ public class GameCheckActivity extends Activity implements OnClickListener{
 
         //add new item to the List
         Button add = (Button) findViewById(R.id.add);
+        Button done= (Button) findViewById(R.id.done);
         add.setOnClickListener(this);
+        done.setOnClickListener(this);
 
         //listener for child row click
         myList.setOnChildClickListener(myListItemClicked);
@@ -74,11 +76,12 @@ public class GameCheckActivity extends Activity implements OnClickListener{
                 Spinner spinner = (Spinner) findViewById(R.id.group);
                 String group = spinner.getSelectedItem().toString();
                 EditText editText = (EditText) findViewById(R.id.task);
-                String product = editText.getText().toString();
+                String task = editText.getText().toString();
                 editText.setText("");
+                MainActivity.taskList.add(task);
 
                 //add a new item to the list
-                int groupPosition = addProduct(group,product);
+                int groupPosition = addProduct(group,task);
                 //notify the list so that changes can take effect
                 listAdapter.notifyDataSetChanged();
 
@@ -92,11 +95,12 @@ public class GameCheckActivity extends Activity implements OnClickListener{
                 break;
 
             // More buttons go here (if any) ...
-
+            case R.id.done:
+                Toast.makeText(this,"saved!",Toast.LENGTH_SHORT).show();
+                finish();
+                break;
         }
     }
-
-
     //method to expand all groups
     private void expandAll() {
         int count = listAdapter.getGroupCount();
@@ -116,11 +120,14 @@ public class GameCheckActivity extends Activity implements OnClickListener{
     //load some initial data into out list
     private void loadData(){
         addProduct("월간","파판 구매");
+        MainActivity.taskList.add("파판 구매");
 
         addProduct("주간","도전 가디언토벌");
-
+        MainActivity.taskList.add("도전 가디언 토벌");
         addProduct("일간","카던돌기");
+        MainActivity.taskList.add("카던돌기");
         addProduct("일간","가디언 토벌");
+        MainActivity.taskList.add("가디언 토벌");
 
     }
 
