@@ -30,8 +30,8 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
     private Button deleteBtn;
     private Button submitBtn;
     private EditText subjectEdit;
-    private EditText classroomEdit;
-    private EditText professorEdit;
+    private EditText placeEdit;
+    private EditText memoEdit;
     private Spinner daySpinner;
     private TextView startTv;
     private TextView endTv;
@@ -54,8 +54,8 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
         deleteBtn = findViewById(R.id.delete_btn);
         submitBtn = findViewById(R.id.submit_btn);
         subjectEdit = findViewById(R.id.subject_edit);
-        classroomEdit = findViewById(R.id.classroom_edit);
-        professorEdit = findViewById(R.id.professor_edit);
+        placeEdit = findViewById(R.id.place);
+        memoEdit = findViewById(R.id.memo);
         daySpinner = findViewById(R.id.day_spinner);
         startTv = findViewById(R.id.start_time);
         endTv = findViewById(R.id.end_time);
@@ -97,7 +97,7 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
         startTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog dialog = new TimePickerDialog(context,listener,schedule.getStartTime().getHour(), schedule.getStartTime().getMinute(), false);
+                TimePickerDialog dialog = new TimePickerDialog(context,0,listener,schedule.getStartTime().getHour(), schedule.getStartTime().getMinute(), false);
                 dialog.show();
             }
 
@@ -113,7 +113,7 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
         endTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog dialog = new TimePickerDialog(context,listener,schedule.getEndTime().getHour(), schedule.getEndTime().getMinute(), false);
+                TimePickerDialog dialog = new TimePickerDialog(context,0,listener,schedule.getEndTime().getHour(), schedule.getEndTime().getMinute(), false);
                 dialog.show();
             }
 
@@ -168,14 +168,14 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
         ArrayList<Schedule> schedules = (ArrayList<Schedule>)i.getSerializableExtra("schedules");
         schedule = schedules.get(0);
         subjectEdit.setText(schedule.getClassTitle());
-        classroomEdit.setText(schedule.getClassPlace());
-        professorEdit.setText(schedule.getProfessorName());
+        placeEdit.setText(schedule.getClassPlace());
+        memoEdit.setText(schedule.getProfessorName());
         daySpinner.setSelection(schedule.getDay());
     }
 
     private void inputDataProcessing(){
         schedule.setClassTitle(subjectEdit.getText().toString());
-        schedule.setClassPlace(classroomEdit.getText().toString());
-        schedule.setProfessorName(professorEdit.getText().toString());
+        schedule.setClassPlace(placeEdit.getText().toString());
+        schedule.setProfessorName(memoEdit.getText().toString());
     }
 }

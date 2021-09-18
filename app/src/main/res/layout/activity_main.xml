@@ -55,11 +55,11 @@ tools:context=".MainActivity">
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:contentDescription="@string/submit"
         android:layout_gravity="bottom|right"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/submit"
         android:onClick="gameCheckAction"
-        android:layout_margin="10dp"/>
+        android:src="@android:drawable/btn_star_big_on" />
 
 </FrameLayout>
 

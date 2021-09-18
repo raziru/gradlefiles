@@ -28,8 +28,6 @@
         <item >Wed</item>
         <item >Thu</item>
         <item >Fri</item>
-        <item >Sat</item>
-        <item >Sun</item>
     </string-array>
 
     <color name="snow">#eee9e9</color>

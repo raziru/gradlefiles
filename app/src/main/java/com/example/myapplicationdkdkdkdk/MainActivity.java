@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         init();
     }
 
@@ -45,7 +45,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loadBtn = findViewById(R.id.load_btn);
 
         timetable = findViewById(R.id.timetable);
+        timetable.setHeaderHighlight(1);
         timetable.setHeaderHighlight(2);
+        timetable.setHeaderHighlight(3);
+        timetable.setHeaderHighlight(4);
+        timetable.setHeaderHighlight(5);
         initView();
     }
 

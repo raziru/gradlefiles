@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".EditActivity">
+    tools:context=".EventEditActivity">
 
     <include layout="@layout/edit_appbar" />
 
@@ -21,16 +21,16 @@
             android:hint="Subject" />
 
         <EditText
-            android:id="@+id/classroom_edit"
+            android:id="@+id/place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Classroom" />
+            android:hint="Place" />
 
         <EditText
-            android:id="@+id/professor_edit"
+            android:id="@+id/memo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Professor" />
+            android:hint="memo" />
 
         <include layout="@layout/time_box"/>
 
