@@ -6,4 +6,31 @@
     <string name="action_three_day_view">action_three_day_view</string>
     <string name="action_week_view">action_week_view</string>
     <string name="submit">submit</string>
+    <string name="menu_settings">Settings</string>
+    <string-array name="dept_array">
+        <item>월간</item>
+        <item>주간</item>
+        <item>일간</item>
+    </string-array>
+
+    <string-array name="header_title">
+        <item></item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+    </string-array>
+
+    <string-array name="days">
+        <item >Mon</item>
+        <item >Tue</item>
+        <item >Wed</item>
+        <item >Thu</item>
+        <item >Fri</item>
+        <item >Sat</item>
+        <item >Sun</item>
+    </string-array>
+
+    <color name="snow">#eee9e9</color>
 </resources>
