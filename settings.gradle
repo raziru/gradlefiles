@@ -1,2 +1,4 @@
 include ':app'
 rootProject.name = "My Applicationdkdkdkdk"
+include ':lib_task_api'
+include ':lib_interpreter'

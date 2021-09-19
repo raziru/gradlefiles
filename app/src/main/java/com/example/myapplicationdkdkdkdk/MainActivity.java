@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -14,7 +16,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.tlaabs.timetableview.Schedule;
+import com.github.tlaabs.timetableview.Time;
 import com.github.tlaabs.timetableview.TimetableView;
+
+import org.tensorflow.lite.examples.textclassification.client.Result;
+import org.tensorflow.lite.examples.textclassification.client.TextClassificationClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +29,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Context context;
     public static final int REQUEST_ADD = 1;
     public static final int REQUEST_EDIT = 2;
+    private Handler handler;
 
+    int i,j;
+    float max;
+    float maxindex;
+    float reset=0;
 
     private Button addBtn;
     private Button clearBtn;
     private Button saveBtn;
     private Button loadBtn;
     private Button goBtn;
-    private static final String MODEL_SETTING = "model";
-    private AssetManager assetMngr;
+    private Button recentBtn;
     private TextClassificationClient client;
-    private static final String TAG = "TextClassificationDemo";
 
+    public static List<Float> confiList;
+    public static List<Time> startList;
+    public static List<Time> endList;
+    public static List<Integer> dayList;
     public static List<String> taskList;
+    public static List<String> workList;
 
     private TimetableView timetable;
     @Override
@@ -43,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         client = new TextClassificationClient(getApplicationContext());
-        List<TextClassificationClient.Result> results= client.classify("이잉 기모링 ");
+        handler = new Handler();
         init();
     }
 
@@ -54,7 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         saveBtn = findViewById(R.id.save_btn);
         loadBtn = findViewById(R.id.load_btn);
         goBtn = findViewById(R.id.go_btn);
+        recentBtn=findViewById(R.id.recent_btn);
         taskList=new ArrayList<String>();
+        workList=new ArrayList<String>();
+
 
         timetable = findViewById(R.id.timetable);
         timetable.setHeaderHighlight(1);
@@ -63,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         timetable.setHeaderHighlight(4);
         timetable.setHeaderHighlight(5);
         initView();
+
     }
 
     private void initView(){
@@ -158,6 +176,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void letsLSTM() {
 
+        for( i=0; i<workList.size();i++)
+        {
+            classify(workList.get(i));
+        }
+
+        max=0;
+        maxindex=0;
+        reset=0;
+        for(i=0;i<taskList.size();i++)
+        {
+            for( j=0;j<workList.size();j++)
+            {
+                if(confiList.get(j)>=max)
+                {
+                    maxindex=j;
+                }
+            }
+            confiList.set(j,reset);
+        }
+
+        startActivity(new Intent(this,ShowContentActivity.class));
 
 
 
@@ -166,6 +205,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    private void classify(final String text) {
+
+        handler.post(
+                () -> {
+                    // Run text classification with TF Lite.
+                    List<Result> results = client.classify(text);
+
+                    // Show classification result on screen
+                    showResult(results);
+                });
+
+
+    }
+
+    private void showResult(final List<Result> results) {
+        // Run on UI thread as we'll updating our app UI
+
+        confiList.add(results.get(0).getConfidence());
+
     }
 
 

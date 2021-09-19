@@ -26,10 +26,6 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
     public static final int RESULT_OK_EDIT = 2;
     public static final int RESULT_OK_DELETE = 3;
 
-    private float[] results;
-    private String temp;
-    private String[] preprocessed;
-
     private Context context;
 
     private Button deleteBtn;
@@ -144,6 +140,10 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
                     //you can add more schedules to ArrayList
                     schedules.add(schedule);
                     i.putExtra("schedules",schedules);
+                    MainActivity.workList.add(schedule.getClassTitle());
+                    MainActivity.startList.add(schedule.getStartTime());
+                    MainActivity.endList.add(schedule.getEndTime());
+                    MainActivity.dayList.add(schedule.getDay());
                     setResult(RESULT_OK_ADD,i);
                     finish();
                 }
@@ -171,10 +171,8 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
         Intent i = getIntent();
         editIdx = i.getIntExtra("idx",-1);
         ArrayList<Schedule> schedules = (ArrayList<Schedule>)i.getSerializableExtra("schedules");
-        schedule = schedules.get(0);
         subjectEdit.setText(schedule.getClassTitle());
         placeEdit.setText(schedule.getClassPlace());
-        temp=schedule.getClassTitle();
         memoEdit.setText(schedule.getProfessorName());
         daySpinner.setSelection(schedule.getDay());
     }

@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplicationdkdkdkdk">
-        <activity android:name=".EventEditActivity"></activity>
+        <activity android:name=".ShowContentActivity"></activity>
+        <activity android:name=".EventEditActivity" />
         <activity android:name=".GameCheckActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
