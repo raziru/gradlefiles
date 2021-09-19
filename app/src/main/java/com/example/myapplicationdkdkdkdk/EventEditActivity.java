@@ -26,6 +26,7 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
     public static final int RESULT_OK_EDIT = 2;
     public static final int RESULT_OK_DELETE = 3;
 
+
     private Context context;
 
     private Button deleteBtn;
@@ -141,9 +142,6 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
                     schedules.add(schedule);
                     i.putExtra("schedules",schedules);
                     MainActivity.workList.add(schedule.getClassTitle());
-                    MainActivity.startList.add(schedule.getStartTime());
-                    MainActivity.endList.add(schedule.getEndTime());
-                    MainActivity.dayList.add(schedule.getDay());
                     setResult(RESULT_OK_ADD,i);
                     finish();
                 }
@@ -155,6 +153,7 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
                     i.putExtra("idx",editIdx);
                     i.putExtra("schedules",schedules);
                     setResult(RESULT_OK_EDIT,i);
+                    MainActivity.workList.add(schedule.getClassTitle());
                     finish();
                 }
                 break;

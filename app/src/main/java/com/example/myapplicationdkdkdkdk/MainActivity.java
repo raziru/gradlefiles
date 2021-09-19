@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     int i,j;
     float max;
-    float maxindex;
+    int maxindex;
     float reset=0;
 
     private Button addBtn;
@@ -45,9 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextClassificationClient client;
 
     public static List<Float> confiList;
-    public static List<Time> startList;
-    public static List<Time> endList;
-    public static List<Integer> dayList;
+    public static List<Float> sortedconfiList;
     public static List<String> taskList;
     public static List<String> workList;
 
@@ -71,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recentBtn=findViewById(R.id.recent_btn);
         taskList=new ArrayList<String>();
         workList=new ArrayList<String>();
+        confiList=new ArrayList<Float>();
+        sortedconfiList=new ArrayList<Float>();
 
 
         timetable = findViewById(R.id.timetable);
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         saveBtn.setOnClickListener(this);
         loadBtn.setOnClickListener(this);
         goBtn.setOnClickListener(this);
+        recentBtn.setOnClickListener(this);
 
         timetable.setOnStickerSelectEventListener(new TimetableView.OnStickerSelectedListener() {
             @Override
@@ -122,8 +123,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.go_btn:
                 letsLSTM();
                 break;
+            case R.id.recent_btn:
+                SeeRecent();
+                break;
 
         }
+    }
+
+    private void SeeRecent() {
+        startActivity(new Intent(this,ShowContentActivity.class));
     }
 
     @Override
@@ -193,7 +201,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     maxindex=j;
                 }
             }
-            confiList.set(j,reset);
+            sortedconfiList.add(confiList.get(maxindex));
+            confiList.set(maxindex,reset);
         }
 
         startActivity(new Intent(this,ShowContentActivity.class));
