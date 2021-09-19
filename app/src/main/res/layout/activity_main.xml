@@ -4,7 +4,8 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
-tools:context=".MainActivity">
+tools:context=".MainActivity"
+    >
 
 
 <LinearLayout
@@ -51,13 +52,12 @@ tools:context=".MainActivity">
         app:column_count="6"
         app:row_count="12" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/go_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="70dp"
-        android:onClick="letsLSTM"
         android:src="@android:drawable/ic_media_play"
         android:text="gogo" />
 

@@ -15,10 +15,14 @@
  */
 
 package com.example.myapplicationdkdkdkdk;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.util.Log;
+
+import androidx.annotation.WorkerThread;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,23 +43,18 @@ import org.tensorflow.lite.support.metadata.MetadataExtractor;
 
 /** Interface to load TfLite model and provide predictions. */
 public class TextClassificationClient {
-  private static final String TAG = "Interpreter";
+  private static final String TAG = "TextClassificationDemo";
+  private static final String MODEL_PATH = "/mymodelLSTM.tflite";
+  private static final String DIC_PATH = "text_classification_vocab.txt";
+  private static final String LABEL_PATH = "text_classification_labels.txt";
 
-  private static final int SENTENCE_LEN = 256; // The maximum length of an input sentence.
-  // Simple delimiter to split words.
-  private static final String SIMPLE_SPACE_OR_PUNCTUATION = " |\\,|\\.|\\!|\\?|\n";
-  private static final String MODEL_PATH = "mymodlelLSTM.tflite";
-  /*
-   * Reserved values in ImdbDataSet dic:
-   * dic["<PAD>"] = 0      used for padding
-   * dic["<START>"] = 1    mark for the start of a sentence
-   * dic["<UNKNOWN>"] = 2  mark for unknown words (OOV)
-   */
+  private static final int SENTENCE_LEN = 256;
+  private static final String SIMPLE_SPACE_OR_PUNCTUATION = " |\\\\,|\\\\.|\\\\!|\\\\?|\\n";
+
   private static final String START = "<START>";
   private static final String PAD = "<PAD>";
   private static final String UNKNOWN = "<UNKNOWN>";
 
-  /** Number of results to show in the UI. */
   private static final int MAX_RESULTS = 3;
 
   private final Context context;
@@ -63,79 +62,129 @@ public class TextClassificationClient {
   private final List<String> labels = new ArrayList<>();
   private Interpreter tflite;
 
+  public static class Result {
+
+    private final String id;
+    private final String title;
+    private final Float confidence;
+
+    public Result(String id, String title, Float confidence) {
+      this.id = id;
+      this.title = title;
+      this.confidence = confidence;
+    }
+
+    public String getId() {
+      return id;
+    }
+
+    public String getTitle() {
+      return title;
+    }
+
+    public Float getConfidence() {
+      return confidence;
+    }
+
+    @SuppressLint("DefaultLocale")
+    @Override
+    public String toString() {
+      String resultString = "";
+
+      if (id != null) {
+        resultString += "[" + id + "] ";
+      }
+
+      if (title != null) {
+        resultString += title + " ";
+      }
+
+      if (confidence != null) {
+        resultString += String.format("(%.1f%%) ", confidence * 100.0f);
+      }
+
+      return resultString.trim();
+    }
+  };
+
   public TextClassificationClient(Context context) {
     this.context = context;
   }
 
-  /** Load the TF Lite model and dictionary so that the client can start classifying text. */
+  @WorkerThread
   public void load() {
     loadModel();
+    loadDictionary();
+    loadLabels();
   }
 
-  /** Load TF Lite model. */
+  @WorkerThread
   private synchronized void loadModel() {
     try {
-      // Load the TF Lite model
-      ByteBuffer buffer = loadModelFile(this.context.getAssets(), MODEL_PATH);
+      ByteBuffer buffer = loadModelFile(this.context.getAssets());
       tflite = new Interpreter(buffer);
-      Log.v(TAG, "TFLite model loaded.");
-
-      // Use metadata extractor to extract the dictionary and label files.
-      MetadataExtractor metadataExtractor = new MetadataExtractor(buffer);
-
-      // Extract and load the dictionary file.
-      InputStream dictionaryFile = metadataExtractor.getAssociatedFile("vocab.txt");
-      loadDictionaryFile(dictionaryFile);
-      Log.v(TAG, "Dictionary loaded.");
-
-      // Extract and load the label file.
-      InputStream labelFile = metadataExtractor.getAssociatedFile("labels.txt");
-      loadLabelFile(labelFile);
-      Log.v(TAG, "Labels loaded.");
+      Log.v(TAG, "TFLite Model Loaded");
 
     } catch (IOException ex) {
-      Log.e(TAG, "Error loading TF Lite model.\n", ex);
+      Log.v(TAG, ex.getMessage());
     }
   }
 
-  /** Free up resources as the client is no longer needed. */
-  public synchronized void unload() {
+  @WorkerThread
+  private synchronized void loadDictionary() {
+    try {
+      loadDictionaryFile(this.context.getAssets());
+      Log.v(TAG, "Dictionary Loaded");
+    } catch (IOException ex) {
+      Log.v(TAG, ex.getMessage());
+    }
+  }
+
+  @WorkerThread
+  private synchronized void loadLabels() {
+    try {
+      loadLabelFile(this.context.getAssets());
+      Log.v(TAG, "Labels Loaded");
+    } catch (IOException ex) {
+      Log.v(TAG, ex.getMessage());
+    }
+  }
+
+  @WorkerThread
+  private synchronized void unload(){
     tflite.close();
     dic.clear();
     labels.clear();
   }
 
-  /** Classify an input string and returns the classification results. */
+  @WorkerThread
   public synchronized List<Result> classify(String text) {
-    // Pre-prosessing.
-    int[][] input = tokenizeInputText(text);
+    float[][] input = tokenizeInputText(text);
 
-    // Run inference.
-    Log.v(TAG, "Classifying text with TF Lite...");
+    Log.v(TAG, "Classifying with TFLite");
+
     float[][] output = new float[1][labels.size()];
+    System.out.println("input inside classify in textclient" + Arrays.deepToString(input) + " and labels size is " + labels.size());
+    System.out.println("Out put is " + Arrays.deepToString(output));
     tflite.run(input, output);
 
-    // Find the best classifications.
-    PriorityQueue<Result> pq =
-        new PriorityQueue<>(
+    PriorityQueue<Result> pq = new PriorityQueue<>(
             MAX_RESULTS, (lhs, rhs) -> Float.compare(rhs.getConfidence(), lhs.getConfidence()));
-    for (int i = 0; i < labels.size(); i++) {
+    for(int i = 0; i < labels.size(); i++) {
       pq.add(new Result("" + i, labels.get(i), output[0][i]));
     }
+
     final ArrayList<Result> results = new ArrayList<>();
-    while (!pq.isEmpty()) {
+    while (!pq.isEmpty()){
       results.add(pq.poll());
     }
 
-    Collections.sort(results);
-    // Return the probability of each class.
     return results;
   }
 
-  /** Load TF Lite model from assets. */
-  private static MappedByteBuffer loadModelFile(AssetManager assetManager, String modelPath)
-      throws IOException {
-    try (AssetFileDescriptor fileDescriptor = assetManager.openFd(modelPath);
+  private static MappedByteBuffer loadModelFile(AssetManager assetManager) throws IOException {
+
+    try(AssetFileDescriptor fileDescriptor = assetManager.openFd(MODEL_PATH);
         FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor())) {
       FileChannel fileChannel = inputStream.getChannel();
       long startOffset = fileDescriptor.getStartOffset();
@@ -144,32 +193,32 @@ public class TextClassificationClient {
     }
   }
 
-  /** Load dictionary from model file. */
-  private void loadLabelFile(InputStream ins) throws IOException {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(ins));
-    // Each line in the label file is a label.
-    while (reader.ready()) {
-      labels.add(reader.readLine());
-    }
-  }
-
-  /** Load labels from model file. */
-  private void loadDictionaryFile(InputStream ins) throws IOException {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(ins));
-    // Each line in the dictionary has two columns.
-    // First column is a word, and the second is the index of this word.
-    while (reader.ready()) {
-      List<String> line = Arrays.asList(reader.readLine().split(" "));
-      if (line.size() < 2) {
-        continue;
+  private void loadLabelFile(AssetManager assetManager) throws IOException{
+    try (InputStream ins = assetManager.open(LABEL_PATH);
+         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(ins))){
+      while (bufferedReader.ready()) {
+        labels.add(bufferedReader.readLine());
       }
-      dic.put(line.get(0), Integer.parseInt(line.get(1)));
     }
   }
 
-  /** Pre-prosessing: tokenize and map the input words into a float array. */
-  int[][] tokenizeInputText(String text) {
-    int[] tmp = new int[SENTENCE_LEN];
+  private void loadDictionaryFile(AssetManager assetManager) throws IOException{
+    try (InputStream ins = assetManager.open(DIC_PATH);
+         BufferedReader reader = new BufferedReader(new InputStreamReader(ins))){
+      while (reader.ready()){
+        List<String> line = Arrays.asList(reader.readLine().split(" "));
+        if (line.size() < 2){
+          continue;
+        }
+
+        dic.put(line.get(0), Integer.parseInt(line.get(1)));
+      }
+    }
+  }
+
+  float[][] tokenizeInputText(String text) {
+
+    float[] tmp = new float[SENTENCE_LEN];
     List<String> array = Arrays.asList(text.split(SIMPLE_SPACE_OR_PUNCTUATION));
 
     int index = 0;
@@ -186,7 +235,7 @@ public class TextClassificationClient {
     }
     // Padding and wrapping.
     Arrays.fill(tmp, index, SENTENCE_LEN - 1, (int) dic.get(PAD));
-    int[][] ans = {tmp};
+    float[][] ans = {tmp};
     return ans;
   }
 
@@ -198,7 +247,8 @@ public class TextClassificationClient {
     return this.tflite;
   }
 
-  List<String> getLabels() {
+  List<String> getLabels(){
     return this.labels;
   }
 }
+
