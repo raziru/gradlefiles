@@ -72,9 +72,7 @@ public class GameCheckAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isLastChild, View view,
-                             ViewGroup parent) {
-
+    public View getGroupView(int groupPosition, boolean isLastChild, View view,ViewGroup parent) {
         Parent headerInfo = (Parent) getGroup(groupPosition);
         if (view == null) {
             LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

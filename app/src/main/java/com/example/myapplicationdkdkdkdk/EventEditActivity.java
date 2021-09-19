@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.tlaabs.timetableview.Schedule;
@@ -24,6 +25,10 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
     public static final int RESULT_OK_ADD = 1;
     public static final int RESULT_OK_EDIT = 2;
     public static final int RESULT_OK_DELETE = 3;
+
+    private float[] results;
+    private String temp;
+    private String[] preprocessed;
 
     private Context context;
 
@@ -169,6 +174,7 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
         schedule = schedules.get(0);
         subjectEdit.setText(schedule.getClassTitle());
         placeEdit.setText(schedule.getClassPlace());
+        temp=schedule.getClassTitle();
         memoEdit.setText(schedule.getProfessorName());
         daySpinner.setSelection(schedule.getDay());
     }

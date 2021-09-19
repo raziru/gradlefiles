@@ -5,22 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
-
-import org.tensorflow.lite.Interpreter;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-
-
-
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,14 +21,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.tlaabs.timetableview.Schedule;
 import com.github.tlaabs.timetableview.TimetableView;
 
+import kkkk.textclassification.client.Result;
+import org.tensorflow.lite.examples.textclassification.client.TextClassificationClient;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Context context;
     public static final int REQUEST_ADD = 1;
     public static final int REQUEST_EDIT = 2;
-    Interpreter tflite;
+
 
     private Button addBtn;
     private Button clearBtn;
@@ -43,6 +41,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button loadBtn;
     private int editIdx;
     private Schedule schedule;
+    private static final String MODEL_SETTING = "model";
+    private AssetManager assetMngr;
+    private String text;
+
+    private void configApp() {
+
+        //Getting TF settings
+
+        SharedPreferences preferences = getSharedPreferences(MODEL_SETTING, MODE_PRIVATE);
+        if (!preferences.contains("model_file")) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("model_file", "file:///android_asset/mymodelLSTM.tflite");
+            editor.putString("vocab_file", "vocab_dict.json");
+            editor.putString("input_node", "input_x:0");
+            editor.putString("output_node", "output/predictions32:0");
+            editor.putString("num_classes", "2");
+            editor.apply();
+        }
+    }
 
     public static List<String> taskList;
 
@@ -51,11 +68,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        try {
-            tflite=new Interpreter(loadModelFile());
-        } catch (Exception ex){
-            ex.printStackTrace();
+
+        configApp();
+
+        assetMngr = this.getAssets();
+        SharedPreferences preferences = getSharedPreferences(MODEL_SETTING, MODE_PRIVATE);
+        String model_file = preferences.getString("model_file", "");
+        String vocab_file = preferences.getString("vocab_file", "");
+        String input_node = preferences.getString("input_node", "");
+        String output_node = preferences.getString("output_node", "");
+        int num_classes = Integer.valueOf(preferences.getString("num_classes", ""));
+
+        if (model_file.equalsIgnoreCase("") || vocab_file.equalsIgnoreCase("")) {
+            Log.e(TAG, "Cannot read preferences!");
+            return;
         }
+
+        classifier.initialize(assetMngr, model_file, vocab_file,input_node, output_node, num_classes);
         init();
     }
 
@@ -153,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void loadSavedData(){
         timetable.removeAll();
         SharedPreferences mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String savedData = mPref.getString("timetable_demo","");
+        String savedData = mPref.getString("timetable","");
         if(savedData == null && savedData.equals("")) return;
         timetable.load(savedData);
         Toast.makeText(this,"loaded!",Toast.LENGTH_SHORT).show();
@@ -163,39 +192,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void letsLSTM(View view) {
-        String title;
-        String place;
-        String memo;
-
-        String title_temp;
-        String place_temp;
-        String memo_temp;
-        float max =0;
-        float[] inputVal=new float[1];
-        float [][] outputVal=new float[1][1];
-
-        Intent i = getIntent();
-        editIdx = i.getIntExtra("idx",-1);
-        ArrayList<Schedule> schedules = (ArrayList<Schedule>)i.getSerializableExtra("schedules");
-        schedule = schedules.get(0);
-        title_temp=schedule.getClassTitle();
-        place_temp=schedule.getClassPlace();
-        memo_temp=schedule.getProfessorName();
-        schedule.getEndTime();
-        schedule.getStartTime();
-        schedule.getDay();
-
-
-        inputVal[0]=Float.valueOf(title_temp);
-        float inferredValue=outputVal[0][0];
-        if (inferredValue>=max)
-        {
-            max=inferredValue;
-            title=title_temp;
-            place=place_temp;
-            memo=memo_temp;
-
-        }
 
 
 
@@ -205,15 +201,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-    }
-    /** Memory-map the model file in Assets. */
-    private MappedByteBuffer loadModelFile() throws IOException {
-        AssetFileDescriptor fileDescriptor = this.getAssets().openFd("mymodelLSTM.tflite");
-        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
-        FileChannel fileChannel = inputStream.getChannel();
-        long startOffset = fileDescriptor.getStartOffset();
-        long declaredLength = fileDescriptor.getDeclaredLength();
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
     }
 
 

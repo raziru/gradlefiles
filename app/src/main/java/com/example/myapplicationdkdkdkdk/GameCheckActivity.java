@@ -81,7 +81,7 @@ public class GameCheckActivity extends Activity implements OnClickListener{
                 MainActivity.taskList.add(task);
 
                 //add a new item to the list
-                int groupPosition = addProduct(group,task);
+                int groupPosition = addTask(group,task);
                 //notify the list so that changes can take effect
                 listAdapter.notifyDataSetChanged();
 
@@ -104,7 +104,8 @@ public class GameCheckActivity extends Activity implements OnClickListener{
     //method to expand all groups
     private void expandAll() {
         int count = listAdapter.getGroupCount();
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++)
+        {
             myList.expandGroup(i);
         }
     }
@@ -112,21 +113,21 @@ public class GameCheckActivity extends Activity implements OnClickListener{
     //method to collapse all groups
     private void collapseAll() {
         int count = listAdapter.getGroupCount();
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++)
+        {
             myList.collapseGroup(i);
         }
     }
 
     //load some initial data into out list
     private void loadData(){
-        addProduct("월간","파판 구매");
-        MainActivity.taskList.add("파판 구매");
-
-        addProduct("주간","도전 가디언토벌");
+        addTask("월간","파판 레이드");
+        MainActivity.taskList.add("파판 레이드");
+        addTask("주간","도전 가디언토벌");
         MainActivity.taskList.add("도전 가디언 토벌");
-        addProduct("일간","카던돌기");
+        addTask("일간","카던돌기");
         MainActivity.taskList.add("카던돌기");
-        addProduct("일간","가디언 토벌");
+        addTask("일간","가디언 토벌");
         MainActivity.taskList.add("가디언 토벌");
 
     }
@@ -167,24 +168,24 @@ public class GameCheckActivity extends Activity implements OnClickListener{
     };
 
     //here we maintain our products in various departments
-    private int addProduct(String group, String product){
+    private int addTask(String group, String product){
 
         int groupPosition = 0;
 
         //check the hash map if the group already exists
-        Parent headerInfo = mygroup.get(group);
+        Parent Parent = mygroup.get(group);
         //add the group if doesn't exists
-        if(headerInfo == null){
-            headerInfo = new Parent();
-            headerInfo.setName(group);
-            mygroup.put(group, headerInfo);
-            deptList.add(headerInfo);
+        if(Parent == null){
+            Parent = new Parent();
+            Parent.setName(group);
+            mygroup.put(group, Parent);
+            deptList.add(Parent);
         }
 
         //get the children for the group
-        ArrayList<Child> productList = headerInfo.getProductList();
+        ArrayList<Child> taskList = Parent.getProductList();
         //size of the children list
-        int listSize = productList.size();
+        int listSize = taskList.size();
         //add to the counter
         listSize++;
 
@@ -192,11 +193,11 @@ public class GameCheckActivity extends Activity implements OnClickListener{
         Child detailInfo = new Child();
         detailInfo.setSequence(String.valueOf(listSize));
         detailInfo.setName(product);
-        productList.add(detailInfo);
-        headerInfo.setProductList(productList);
+        taskList.add(detailInfo);
+        Parent.setProductList(taskList);
 
         //find the group position inside the list
-        groupPosition = deptList.indexOf(headerInfo);
+        groupPosition = deptList.indexOf(Parent);
         return groupPosition;
     }
 
