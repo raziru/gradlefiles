@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.tensorflow.lite.support.label.Category;
 import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
@@ -53,6 +54,7 @@ public class TextClassificationClient {
   }
 
   public List<Result> classify(String text) {
+
     List<Category> apiResults = classifier.classify(text);
     List<Result> results = new ArrayList<>(apiResults.size());
     for (int i = 0; i < apiResults.size(); i++) {
@@ -61,5 +63,8 @@ public class TextClassificationClient {
     }
     Collections.sort(results);
     return results;
+
   }
+
+
 }

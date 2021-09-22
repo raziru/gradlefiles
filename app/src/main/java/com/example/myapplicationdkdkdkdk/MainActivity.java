@@ -3,11 +3,9 @@ package com.example.myapplicationdkdkdkdk;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,6 +18,7 @@ import com.github.tlaabs.timetableview.Time;
 import com.github.tlaabs.timetableview.TimetableView;
 
 import org.tensorflow.lite.examples.textclassification.client.Result;
+
 import org.tensorflow.lite.examples.textclassification.client.TextClassificationClient;
 
 import java.util.ArrayList;
@@ -217,16 +216,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void classify(final String text) {
+        // Run text classification with TF Lite.
+        List<Result> results = client.classify(text);
 
-        handler.post(
-                () -> {
-                    // Run text classification with TF Lite.
-                    List<Result> results = client.classify(text);
-
-                    // Show classification result on screen
-                    showResult(results);
-                });
-
+        // Show classification result on screen
+        showResult(results);
 
     }
 
