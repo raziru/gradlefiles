@@ -1,5 +1,9 @@
 org/tensorflow/lite/examples/textclassification/client/Result.java
  org.tensorflow.lite.examples.textclassification.client.Result
+org/tensorflow/lite/examples/textclassification/client/ml/Offensive.java
+ org.tensorflow.lite.examples.textclassification.client.ml.Offensive
+ org.tensorflow.lite.examples.textclassification.client.ml.Offensive$1
+ org.tensorflow.lite.examples.textclassification.client.ml.Offensive$Outputs
 org/tensorflow/lite/examples/textclassification/client/TextClassificationClient.java
  org.tensorflow.lite.examples.textclassification.client.TextClassificationClient
 org/tensorflow/lite/examples/textclassification/client/BuildConfig.java

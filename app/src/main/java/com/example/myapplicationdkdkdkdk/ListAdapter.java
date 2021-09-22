@@ -12,22 +12,19 @@ import java.util.ArrayList;
 public class ListAdapter extends BaseAdapter {
     private Context context;
 
-    private ArrayList<String> task;
-    private ArrayList<String> work;
-    private ArrayList<String> confi;
+    private ArrayList<String> array;
+
     private ViewHolder viewHolder;
 
-    public ListAdapter(Context context,ArrayList<String> task, ArrayList<String> work,ArrayList<String> confi){
+    public ListAdapter(Context context,ArrayList<String> array){
         this.context=context;
-        this.work=work;
-        this.task=task;
-        this.confi=confi;
+        this.array=array;
     }
     @Override
 
     public int getCount() {
 
-        return task.size();
+        return array.size();
     }
 
 
@@ -36,7 +33,7 @@ public class ListAdapter extends BaseAdapter {
 
     public Object getItem(int position) {
 
-        return task.get(position);
+        return array.get(position);
 
     }
 
@@ -76,7 +73,7 @@ public class ListAdapter extends BaseAdapter {
 
         // View에 Data 세팅
 
-        viewHolder.txt_name.setText(task.get(position));
+        viewHolder.txt_name.setText(array.get(position));
 
 
 
@@ -94,7 +91,7 @@ public class ListAdapter extends BaseAdapter {
 
         public ViewHolder(View convertView) {
 
-            txt_name = (TextView) convertView.findViewById(R.id.taskname);
+            txt_name = (TextView) convertView.findViewById(R.id.list_answer);
 
         }
 

@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             confiList.set(maxindex,reset);
         }
 
-        startActivity(new Intent(this,ShowContentActivity.class));
+       // startActivity(new Intent(this,ShowContentActivity.class));
 
 
 
