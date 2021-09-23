@@ -25,6 +25,7 @@ public class GameCheckActivity extends Activity implements OnClickListener{
     private GameCheckAdapter listAdapter;
     public ExpandableListView myList;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
