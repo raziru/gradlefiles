@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="15dp"
         android:textStyle="bold" />
 
     <Button
@@ -24,9 +26,9 @@
         android:id="@+id/task"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/group"
         android:layout_alignBaseline="@id/add"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/group"
         android:inputType="text" />
 
     <TextView
@@ -46,14 +48,17 @@
         android:id="@+id/myList"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/textView1" />
+        android:layout_below="@id/textView1"/>
 
     <Button
         android:id="@+id/done"
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_below="@id/task"
+        android:layout_alignParentRight="true"
+        android:backgroundTint="#2196F3"
         android:text="제출" />
+
 
 </RelativeLayout>

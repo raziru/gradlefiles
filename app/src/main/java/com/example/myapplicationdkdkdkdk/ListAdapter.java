@@ -81,13 +81,9 @@ public class ListAdapter extends BaseAdapter {
 
     }
 
-
-
     public class ViewHolder {
 
         private TextView txt_name;
-
-
 
         public ViewHolder(View convertView) {
 

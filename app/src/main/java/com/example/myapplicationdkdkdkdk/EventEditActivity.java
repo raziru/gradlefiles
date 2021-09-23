@@ -22,9 +22,9 @@ import com.github.tlaabs.timetableview.Time;
 import java.util.ArrayList;
 
 public class EventEditActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final int RESULT_OK_ADD = 1;
-    public static final int RESULT_OK_EDIT = 2;
-    public static final int RESULT_OK_DELETE = 3;
+    public static final int ADD = 1;
+    public static final int EDIT = 2;
+    public static final int DELETE = 3;
 
 
     private Context context;
@@ -55,17 +55,16 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
         this.context = this;
         deleteBtn = findViewById(R.id.delete_btn);
         submitBtn = findViewById(R.id.submit_btn);
-        subjectEdit = findViewById(R.id.subject_edit);
+        subjectEdit = findViewById(R.id.title);
         placeEdit = findViewById(R.id.place);
         memoEdit = findViewById(R.id.memo);
         daySpinner = findViewById(R.id.day_spinner);
         startTv = findViewById(R.id.start_time);
         endTv = findViewById(R.id.end_time);
 
-        //set the default time
         schedule = new Schedule();
-        schedule.setStartTime(new Time(10,0));
-        schedule.setEndTime(new Time(13,30));
+        schedule.setStartTime(new Time(11,0));
+        schedule.setEndTime(new Time(15,30));
 
         checkMode();
         initView();
@@ -74,9 +73,9 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
     /** check whether the mode is ADD or EDIT */
     private void checkMode(){
         Intent i = getIntent();
-        mode = i.getIntExtra("mode",MainActivity.REQUEST_ADD);
+        mode = i.getIntExtra("mode",MainActivity.ADD);
 
-        if(mode == MainActivity.REQUEST_EDIT){
+        if(mode == MainActivity.EDIT){
             loadScheduleData();
             deleteBtn.setVisibility(View.VISIBLE);
         }
@@ -134,7 +133,7 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.submit_btn:
-                if(mode == MainActivity.REQUEST_ADD){
+                if(mode == MainActivity.ADD){
                     inputDataProcessing();
                     Intent i = new Intent();
                     ArrayList<Schedule> schedules = new ArrayList<Schedule>();
@@ -142,25 +141,24 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
                     schedules.add(schedule);
                     i.putExtra("schedules",schedules);
                     MainActivity.workList.add(schedule.getClassTitle());
-                    setResult(RESULT_OK_ADD,i);
+                    setResult(ADD,i);
                     finish();
                 }
-                else if(mode == MainActivity.REQUEST_EDIT){
+                else if(mode == MainActivity.EDIT){
                     inputDataProcessing();
                     Intent i = new Intent();
                     ArrayList<Schedule> schedules = new ArrayList<Schedule>();
                     schedules.add(schedule);
                     i.putExtra("idx",editIdx);
                     i.putExtra("schedules",schedules);
-                    setResult(RESULT_OK_EDIT,i);
-                    MainActivity.workList.add(schedule.getClassTitle());
+                    setResult(EDIT,i);
                     finish();
                 }
                 break;
             case R.id.delete_btn:
                 Intent i = new Intent();
                 i.putExtra("idx",editIdx);
-                setResult(RESULT_OK_DELETE, i);
+                setResult(DELETE, i);
                 finish();
                 break;
         }

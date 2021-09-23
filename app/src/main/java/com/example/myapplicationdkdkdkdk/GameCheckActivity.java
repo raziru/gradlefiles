@@ -54,14 +54,11 @@ public class GameCheckActivity extends Activity implements OnClickListener{
 
         //add new item to the List
         Button add = (Button) findViewById(R.id.add);
-        Button done= (Button) findViewById(R.id.done);
         add.setOnClickListener(this);
-        done.setOnClickListener(this);
 
-        //listener for child row click
-        myList.setOnChildClickListener(myListItemClicked);
-        //listener for group heading click
-        myList.setOnGroupClickListener(myListGroupClicked);
+        //go back main activity
+        Button done= (Button) findViewById(R.id.done);
+        done.setOnClickListener(this);
 
 
     }
@@ -78,6 +75,7 @@ public class GameCheckActivity extends Activity implements OnClickListener{
                 EditText editText = (EditText) findViewById(R.id.task);
                 String task = editText.getText().toString();
                 editText.setText("");
+                //fill task List
                 MainActivity.taskList.add(task);
 
                 //add a new item to the list
@@ -91,7 +89,6 @@ public class GameCheckActivity extends Activity implements OnClickListener{
                 myList.expandGroup(groupPosition);
                 //set the current group to be selected so that it becomes visible
                 myList.setSelectedGroup(groupPosition);
-
                 break;
 
             // More buttons go here (if any) ...
@@ -132,40 +129,6 @@ public class GameCheckActivity extends Activity implements OnClickListener{
 
     }
 
-    //our child listener
-    private OnChildClickListener myListItemClicked =  new OnChildClickListener() {
-
-        public boolean onChildClick(ExpandableListView parent, View v,
-                                    int groupPosition, int childPosition, long id) {
-
-            //get the group header
-            Parent headerInfo = deptList.get(groupPosition);
-            //get the child info
-            Child detailInfo =  headerInfo.getProductList().get(childPosition);
-            //display it or do something with it
-            Toast.makeText(getBaseContext(), "Clicked on Detail " + headerInfo.getName()
-                    + "/" + detailInfo.getName(), Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-    };
-
-    //our group listener
-    private OnGroupClickListener myListGroupClicked =  new OnGroupClickListener() {
-
-        public boolean onGroupClick(ExpandableListView parent, View v,
-                                    int groupPosition, long id) {
-
-            //get the group header
-            Parent headerInfo = deptList.get(groupPosition);
-            //display it or do something with it
-            Toast.makeText(getBaseContext(), "Child on Header " + headerInfo.getName(),
-                    Toast.LENGTH_LONG).show();
-
-            return false;
-        }
-
-    };
 
     //here we maintain our products in various departments
     private int addTask(String group, String product){
@@ -201,6 +164,8 @@ public class GameCheckActivity extends Activity implements OnClickListener{
         return groupPosition;
     }
 
+
+    //set parents
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.list, menu);

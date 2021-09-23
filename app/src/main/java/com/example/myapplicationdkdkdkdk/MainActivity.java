@@ -14,11 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.tlaabs.timetableview.Schedule;
-import com.github.tlaabs.timetableview.Time;
 import com.github.tlaabs.timetableview.TimetableView;
 
 import org.tensorflow.lite.examples.textclassification.client.Result;
-
 import org.tensorflow.lite.examples.textclassification.client.TextClassificationClient;
 
 import java.util.ArrayList;
@@ -26,9 +24,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Context context;
-    public static final int REQUEST_ADD = 1;
-    public static final int REQUEST_EDIT = 2;
-    private Handler handler;
+    public static final int ADD = 1;
+    public static final int EDIT = 2;
 
     int i,j;
     float max;
@@ -37,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button addBtn;
     private Button clearBtn;
-    private Button saveBtn;
-    private Button loadBtn;
     private Button goBtn;
     private Button recentBtn;
     private TextClassificationClient client;
@@ -54,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         client = new TextClassificationClient(getApplicationContext());
-        handler = new Handler();
         init();
     }
 
@@ -62,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.context = this;
         addBtn = findViewById(R.id.add_btn);
         clearBtn = findViewById(R.id.clear_btn);
-        saveBtn = findViewById(R.id.save_btn);
-        loadBtn = findViewById(R.id.load_btn);
         goBtn = findViewById(R.id.go_btn);
         recentBtn=findViewById(R.id.recent_btn);
         taskList=new ArrayList<String>();
@@ -85,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView(){
         addBtn.setOnClickListener(this);
         clearBtn.setOnClickListener(this);
-        saveBtn.setOnClickListener(this);
-        loadBtn.setOnClickListener(this);
         goBtn.setOnClickListener(this);
         recentBtn.setOnClickListener(this);
 
@@ -94,10 +84,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void OnStickerSelected(int idx, ArrayList<Schedule> schedules) {
                 Intent i = new Intent(context, EventEditActivity.class);
-                i.putExtra("mode",REQUEST_EDIT);
+                i.putExtra("mode", EDIT);
                 i.putExtra("idx", idx);
                 i.putExtra("schedules", schedules);
-                startActivityForResult(i,REQUEST_EDIT);
+                startActivityForResult(i, EDIT);
             }
         });
     }
@@ -107,17 +97,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.add_btn:
                 Intent i = new Intent(this,EventEditActivity.class);
-                i.putExtra("mode",REQUEST_ADD);
-                startActivityForResult(i,REQUEST_ADD);
+                i.putExtra("mode", ADD);
+                startActivityForResult(i, ADD);
                 break;
             case R.id.clear_btn:
                 timetable.removeAll();
-                break;
-            case R.id.save_btn:
-                saveByPreference(timetable.createSaveData());
-                break;
-            case R.id.load_btn:
-                loadSavedData();
                 break;
             case R.id.go_btn:
                 letsLSTM();
@@ -137,21 +121,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_ADD:
-                if (resultCode == EventEditActivity.RESULT_OK_ADD) {
+            case ADD:
+                if (resultCode == EventEditActivity.ADD) {
                     ArrayList<Schedule> item = (ArrayList<Schedule>) data.getSerializableExtra("schedules");
                     timetable.add(item);
                 }
                 break;
-            case REQUEST_EDIT:
+            case EDIT:
                 /** Edit -> Submit */
-                if (resultCode == EventEditActivity.RESULT_OK_EDIT) {
+                if (resultCode == EventEditActivity.EDIT) {
                     int idx = data.getIntExtra("idx", -1);
                     ArrayList<Schedule> item = (ArrayList<Schedule>) data.getSerializableExtra("schedules");
                     timetable.edit(idx, item);
                 }
                 /** Edit -> Delete */
-                else if (resultCode == EventEditActivity.RESULT_OK_DELETE) {
+                else if (resultCode == EventEditActivity.DELETE) {
                     int idx = data.getIntExtra("idx", -1);
                     timetable.remove(idx);
                 }
@@ -159,24 +143,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /** save timetableView's data to SharedPreferences in json format */
-    private void saveByPreference(String data){
-        SharedPreferences mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = mPref.edit();
-        editor.putString("timetable_demo",data);
-        editor.commit();
-        Toast.makeText(this,"saved!",Toast.LENGTH_SHORT).show();
-    }
 
     /** get json data from SharedPreferences and then restore the timetable */
-    private void loadSavedData(){
-        timetable.removeAll();
-        SharedPreferences mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String savedData = mPref.getString("timetable","");
-        if(savedData == null && savedData.equals("")) return;
-        timetable.load(savedData);
-        Toast.makeText(this,"loaded!",Toast.LENGTH_SHORT).show();
-    }
     public void gameCheckAction(View view) {
         startActivity(new Intent(this, GameCheckActivity.class));
     }
@@ -204,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             confiList.set(maxindex,reset);
         }
 
-       // startActivity(new Intent(this,ShowContentActivity.class));
+        startActivity(new Intent(this,ShowContentActivity.class));
 
 
 
