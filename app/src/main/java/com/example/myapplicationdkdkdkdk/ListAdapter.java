@@ -56,27 +56,16 @@ public class ListAdapter extends BaseAdapter {
 
 
         if (convertView == null) {
-
             convertView = LayoutInflater.from(context).inflate(R.layout.list_view, parent, false);
-
             viewHolder = new ViewHolder(convertView);
-
             convertView.setTag(viewHolder);
 
         } else {
-
             viewHolder = (ViewHolder) convertView.getTag();
 
         }
 
-
-
-        // View에 Data 세팅
-
         viewHolder.txt_name.setText(array.get(position));
-
-
-
         return convertView;
 
     }
@@ -84,9 +73,7 @@ public class ListAdapter extends BaseAdapter {
     public class ViewHolder {
 
         private TextView txt_name;
-
         public ViewHolder(View convertView) {
-
             txt_name = (TextView) convertView.findViewById(R.id.list_answer);
 
         }

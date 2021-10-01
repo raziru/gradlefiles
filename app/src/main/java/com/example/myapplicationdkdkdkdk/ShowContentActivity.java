@@ -3,7 +3,6 @@ package com.example.myapplicationdkdkdkdk;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -11,6 +10,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import static com.example.myapplicationdkdkdkdk.MainActivity.confiList;
+import static com.example.myapplicationdkdkdkdk.MainActivity.sortedconfiList;
 import static com.example.myapplicationdkdkdkdk.MainActivity.taskList;
 import static com.example.myapplicationdkdkdkdk.MainActivity.workList;
 
@@ -29,15 +29,11 @@ public class ShowContentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_content);
         mListView = (ListView) findViewById(R.id.list_answer);
 
-
-
-        // 데이터 생성
-
         array = new ArrayList<>();
 
-        for(i=0; i< taskList.size(); i++)
+        for(i=0; i< workList.size(); i++)
         {
-            array.add(String.format("게임업무 %s는 %s근처에 두면 좋을것 같아요 자신감:%5.5f",taskList.get(i),workList.get(i),confiList.get(i)));
+            array.add(String.format("게임업무 %s는 %s근처에 두면 좋을것 같아요 \n자신감:%5.2f",taskList.get(i),workList.get(i),confiList.get(i)));
         }
 
         mListAdapter = new ListAdapter(mContext, array);
@@ -50,6 +46,6 @@ public class ShowContentActivity extends AppCompatActivity {
 
     }
     public void goback(View view) {
-        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }
