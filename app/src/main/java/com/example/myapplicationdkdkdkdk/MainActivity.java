@@ -151,13 +151,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void letsLSTM() {
 
-        for( i=0; i<workList.size()+1;i++)
+        for( i=0; i<workList.size();i++)
         {
-            float confi=(float)((Math.random()*100)%100);
-            confiList.add(confi);
-            //confiList.add((float)68.5);
+            classify(workList.get(i));
         }
 
+        max=0;
+        maxindex=0;
+        reset=0;
+        for(i=0;i<taskList.size();i++)
+        {
+            for( j=0;j<workList.size();j++)
+            {
+                if(confiList.get(j)>=max)
+                {
+                    maxindex=j;
+                }
+            }
+            sortedconfiList.add(confiList.get(maxindex));
+            confiList.set(maxindex,reset);
+        }
 
         startActivity(new Intent(this,ShowContentActivity.class));
 
@@ -169,6 +182,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
     }
+
+    private void classify(final String text) {
+        // Run text classification with TF Lite.
+        List<Result> results = client.classify(text);
+
+        // Show classification result on screen
+        showResult(results);
+
+    }
+
+    private void showResult(final List<Result> results) {
+        // Run on UI thread as we'll updating our app UI
+
+        confiList.add(results.get(0).getConfidence());
+
+    }
+
+
+
 
 
 }

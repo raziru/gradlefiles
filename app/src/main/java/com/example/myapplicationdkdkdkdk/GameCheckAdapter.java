@@ -21,7 +21,7 @@ public class GameCheckAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        ArrayList<Child> productList = deptList.get(groupPosition).getProductList();
+        ArrayList<Child> productList = deptList.get(groupPosition).childList();
         return productList.get(childPosition);
     }
 
@@ -51,8 +51,8 @@ public class GameCheckAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
 
-        ArrayList<Child> productList = deptList.get(groupPosition).getProductList();
-        return productList.size();
+        ArrayList<Child> childnameList = deptList.get(groupPosition).childList();
+        return childnameList.size();
 
     }
 

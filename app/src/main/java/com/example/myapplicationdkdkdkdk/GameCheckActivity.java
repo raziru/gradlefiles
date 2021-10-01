@@ -14,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupClickListener;
 
 public class GameCheckActivity extends Activity implements OnClickListener{
 
@@ -132,7 +130,7 @@ public class GameCheckActivity extends Activity implements OnClickListener{
 
 
     //here we maintain our products in various departments
-    private int addTask(String group, String product){
+    private int addTask(String group, String child){
 
         int groupPosition = 0;
 
@@ -147,7 +145,7 @@ public class GameCheckActivity extends Activity implements OnClickListener{
         }
 
         //get the children for the group
-        ArrayList<Child> taskList = Parent.getProductList();
+        ArrayList<Child> taskList = Parent.childList();
         //size of the children list
         int listSize = taskList.size();
         //add to the counter
@@ -156,9 +154,9 @@ public class GameCheckActivity extends Activity implements OnClickListener{
         //create a new child and add that to the group
         Child detailInfo = new Child();
         detailInfo.setSequence(String.valueOf(listSize));
-        detailInfo.setName(product);
+        detailInfo.setName(child);
         taskList.add(detailInfo);
-        Parent.setProductList(taskList);
+        Parent.setChildnameList(taskList);
 
         //find the group position inside the list
         groupPosition = deptList.indexOf(Parent);

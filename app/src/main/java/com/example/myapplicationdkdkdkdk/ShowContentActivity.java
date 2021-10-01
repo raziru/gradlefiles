@@ -10,7 +10,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import static com.example.myapplicationdkdkdkdk.MainActivity.confiList;
-import static com.example.myapplicationdkdkdkdk.MainActivity.sortedconfiList;
 import static com.example.myapplicationdkdkdkdk.MainActivity.taskList;
 import static com.example.myapplicationdkdkdkdk.MainActivity.workList;
 
@@ -33,7 +32,7 @@ public class ShowContentActivity extends AppCompatActivity {
 
         for(i=0; i< workList.size(); i++)
         {
-            array.add(String.format("게임업무 %s는 %s근처에 두면 좋을것 같아요 \n자신감:%5.2f",taskList.get(i),workList.get(i),confiList.get(i)));
+            array.add(String.format("게임할일 %s는 %s 근처에 두면 좋을것 같아요 \nconfidence:%5.2f",taskList.get(i),workList.get(i),confiList.get(i)));
         }
 
         mListAdapter = new ListAdapter(mContext, array);

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Parent {
 
     private String name;
-    private ArrayList<Child> productList = new ArrayList<Child>();;
+    private ArrayList<Child> childnameList = new ArrayList<Child>();;
 
     public String getName() {
         return name;
@@ -14,11 +14,11 @@ public class Parent {
     public void setName(String name) {
         this.name = name;
     }
-    public ArrayList<Child> getProductList() {
-        return productList;
+    public ArrayList<Child> childList() {
+        return childnameList;
     }
-    public void setProductList(ArrayList<Child> productList) {
-        this.productList = productList;
+    public void setChildnameList(ArrayList<Child> childnameList) {
+        this.childnameList = childnameList;
     }
 
 }
