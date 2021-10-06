@@ -54,15 +54,6 @@ tools:context=".MainActivity"
         android:textColor="@color/event_color_05"
         android:text="gogo" />
 
-    <Button
-        android:id="@+id/recent_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="120dp"
-        android:src="@android:drawable/ic_media_play"
-        android:textColor="@color/event_color_05"
-        android:text="recent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

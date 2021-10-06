@@ -13,11 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 public class GameCheckActivity extends Activity implements OnClickListener{
 
-    private LinkedHashMap<String, Parent> mygroup = new LinkedHashMap<String, Parent>();
+    public LinkedHashMap<String, Parent> mygroup = new LinkedHashMap<String, Parent>();
     public ArrayList<Parent> deptList = new ArrayList<Parent>();
 
     private GameCheckAdapter listAdapter;
@@ -74,15 +73,11 @@ public class GameCheckActivity extends Activity implements OnClickListener{
                 EditText editText = (EditText) findViewById(R.id.task);
                 String task = editText.getText().toString();
                 editText.setText("");
-                //fill task List
-                MainActivity.taskList.add(task);
-
                 //add a new item to the list
                 int groupPosition = addTask(group,task);
                 //notify the list so that changes can take effect
                 listAdapter.notifyDataSetChanged();
 
-                //collapse all groups
                 collapseAll();
                 //expand the group where item was just added
                 myList.expandGroup(groupPosition);
@@ -90,14 +85,12 @@ public class GameCheckActivity extends Activity implements OnClickListener{
                 myList.setSelectedGroup(groupPosition);
                 break;
 
-            // More buttons go here (if any) ...
             case R.id.done:
-                Toast.makeText(this,"saved!",Toast.LENGTH_SHORT).show();
                 finish();
                 break;
         }
     }
-    //method to expand all groups
+
     private void expandAll() {
         int count = listAdapter.getGroupCount();
         for (int i = 0; i < count; i++)
@@ -106,7 +99,6 @@ public class GameCheckActivity extends Activity implements OnClickListener{
         }
     }
 
-    //method to collapse all groups
     private void collapseAll() {
         int count = listAdapter.getGroupCount();
         for (int i = 0; i < count; i++)
@@ -115,21 +107,16 @@ public class GameCheckActivity extends Activity implements OnClickListener{
         }
     }
 
-    //load some initial data into out list
     private void loadData(){
         addTask("월간","파판 레이드");
-        MainActivity.taskList.add("파판 레이드");
+
         addTask("주간","도전 가디언토벌");
-        MainActivity.taskList.add("도전 가디언 토벌");
+
         addTask("일간","카던돌기");
-        MainActivity.taskList.add("카던돌기");
-        addTask("일간","가디언 토벌");
-        MainActivity.taskList.add("가디언 토벌");
+
 
     }
 
-
-    //here we maintain our products in various departments
     private int addTask(String group, String child){
 
         int groupPosition = 0;

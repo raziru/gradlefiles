@@ -140,7 +140,6 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
                     //you can add more schedules to ArrayList
                     schedules.add(schedule);
                     i.putExtra("schedules",schedules);
-                    MainActivity.workList.add(schedule.getClassTitle());
                     setResult(ADD,i);
                     finish();
                 }
