@@ -1,0 +1,41 @@
+body {
+  padding: 20px;
+}
+
+.textarea-container {
+  display: flex;
+}
+
+textarea {
+  border: 1px solid #999;
+  border-radius: 4px;
+  font-size: 18px;
+  height: 60px;
+  padding: 8px;
+  width: 500px;
+}
+
+.btn {
+  align-items: center;
+  background: #FFC0CB;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  font-size: 14px;
+  height: 32px;
+  justify-content: cetner;
+  margin-left: 4px;
+  opacity: .9;
+  padding: 2px 18px;
+}
+
+.btn:hover {
+  opacity: 1;
+}
+
+.result {
+  margin-top: 6px;
+  color: #888;
+}
