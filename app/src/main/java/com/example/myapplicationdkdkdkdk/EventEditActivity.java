@@ -64,7 +64,7 @@ public class EventEditActivity extends AppCompatActivity implements View.OnClick
 
         schedule = new Schedule();
         schedule.setStartTime(new Time(11,0));
-        schedule.setEndTime(new Time(15,30));
+        schedule.setEndTime(new Time(13,30));
 
         checkMode();
         initView();

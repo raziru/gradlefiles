@@ -16,14 +16,12 @@ public class webView extends AppCompatActivity {
 
     private WebView mWebView;
 
-    private String myUrl = "http://";// 접속 URL (내장HTML의 경우 왼쪽과 같이 쓰고 아니면 걍 URL)
+    private String myUrl = "http://";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
-
-
 
         mWebView = (WebView) findViewById(webView);
         //allow java script

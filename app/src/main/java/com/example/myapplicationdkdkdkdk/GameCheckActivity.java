@@ -29,22 +29,20 @@ public class GameCheckActivity extends Activity implements OnClickListener{
         setContentView(R.layout.activity_game_check);
 
         Spinner spinner = (Spinner) findViewById(R.id.group);
-        // Create an ArrayAdapter using the string array and a default spinner layout
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.dept_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
+
         spinner.setAdapter(adapter);
 
-        //Just add some data to start with
         loadData();
 
-        //get reference to the ExpandableListView
+
         myList = (ExpandableListView) findViewById(R.id.myList);
-        //create the adapter by passing your ArrayList data
+
         listAdapter = new GameCheckAdapter(GameCheckActivity.this, deptList);
-        //attach the adapter to the list
+
         myList.setAdapter(listAdapter);
 
         //expand all Groups
