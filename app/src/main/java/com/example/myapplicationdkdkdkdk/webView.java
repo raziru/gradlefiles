@@ -27,7 +27,7 @@ public class webView extends AppCompatActivity {
         //allow java script
         mWebView.getSettings().setJavaScriptEnabled(true);
 
-        mWebView.loadUrl("https://raziru.github.io/tfltieWeb/");
+        mWebView.loadUrl("https://raziru.github.io/tfliteWeb/");
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new WebViewClientClass());//open view in original view
 
