@@ -1,12 +1,6 @@
 <resources>
     <string name="app_name">Game Calendar</string>
-    <string name="drag_me">Drag me</string>
-    <string name="action_today">action_today</string>
-    <string name="action_day_view">action_day_view</string>
-    <string name="action_three_day_view">action_three_day_view</string>
-    <string name="action_week_view">action_week_view</string>
     <string name="submit">submit</string>
-    <string name="menu_settings">Settings</string>
     <string-array name="dept_array">
         <item>월간</item>
         <item>주간</item>
